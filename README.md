@@ -75,12 +75,12 @@ We can configure dual-exported package using [Node.js Conditional exports featur
   "exports": {
     ".": {
       "import": {
-        "default": "./lib_esm/index.mjs",
-        "types": "./lib_esm/index.d.mts"
+        "types": "./lib_esm/index.d.mts",
+        "default": "./lib_esm/index.mjs"
       },
       "require": {
-        "default": "./lib_cjs/index.cjs",
-        "types": "./lib_cjs/index.d.cts"
+        "types": "./lib_cjs/index.d.cts",
+        "default": "./lib_cjs/index.cjs"
       }
     }
   }
