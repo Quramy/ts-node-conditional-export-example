@@ -1,19 +1,13 @@
 export default {
   extensionsToTreatAsEsm: [".ts", ".mts"],
-  globals: {
-    "ts-jest": {
-      useESM: true,
-      diagnostics: false
-    }
-  },
   transform: {
-    "^.+\\.m?ts$": "ts-jest"
+    "^.+\\.m?ts$": "@quramy/jest"
   },
   testMatch: [
     "**/?(*.)+(spec|test).?([mc])[jt]s",
     "**/?(*.)+(spec|test).[jt]sx"
   ],
-  testPathIgnorePatterns: ["/node_modules/", "lib_cjs/.*", "lib_esm/.*"],
+  testPathIgnorePatterns: ["/node_modules/", "lib/.*"],
   collectCoverageFrom: ["src/**/*.ts", "!**/testing/**"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.mjs$": "$1.mts",

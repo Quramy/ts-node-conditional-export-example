@@ -1,5 +1,5 @@
 {
-  "name": "@quramy-ts-node-dual-example/jest",
+  "name": "@quramy/jest",
   "version": "1.0.0",
   "description": "",
   "type": "module",
