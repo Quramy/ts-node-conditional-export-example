@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "name": "ts-node-dual-export-example",
+  "description": "An example package to explain how to build dual-export npm package in TypeScript.",
+  "scripts": {
+    "clean": "npm run clean --workspaces",
+    "build": "npm run build --workspaces",
+    "start": "npm run start --workspace user-apps/app-esm --workspace user-apps/app-old"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Quramy/ts-node-dual-export-example.git"
+  },
+  "keywords": [],
+  "author": "Quramy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Quramy/ts-node-dual-export-example/issues"
+  },
+  "homepage": "https://github.com/Quramy/ts-node-dual-export-example#readme",
+  "workspaces": ["packages/*", "user-apps/*"],
+  "devDependencies": {
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.7.0-dev.20220505"
+  }
+}

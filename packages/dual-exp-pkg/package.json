@@ -1,0 +1,34 @@
+{
+  "name": "@quramy-ts-node-dual-example/dual-exp-pkg",
+  "version": "1.0.0",
+  "description": "An example package to explain how to build dual-export npm package in TypeScript.",
+  "keywords": [],
+  "author": "Quramy",
+  "license": "MIT",
+  "files": ["lib_cjs", "lib_esm"],
+  "main": "lib_cjs/index.js",
+  "types": "lib_cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./lib_esm/index.mjs",
+        "types": "./lib_esm/index.d.mts"
+      },
+      "require": {
+        "default": "./lib_cjs/index.cjs",
+        "types": "./lib_cjs/index.d.cts"
+      }
+    }
+  },
+  "scripts": {
+    "clean": "rimraf lib_esm lib_cjs \"*.tsbuildinfo\"",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.0",
+    "typescript": "next"
+  }
+}

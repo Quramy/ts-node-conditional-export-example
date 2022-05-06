@@ -1,0 +1,20 @@
+{
+  "name": "@quramy-ts-node-dual-example/app-old",
+  "version": "1.0.0",
+  "description": "Not module type specified appliaction package.",
+  "main": "./lib/index.js",
+  "scripts": {
+    "clean": "rimraf lib \"*.tsbuildinfo\"",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "author": "Quramy",
+  "license": "MIT",
+  "dependencies": {
+    "@quramy-ts-node-dual-example/dual-exp-pkg": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "next"
+  }
+}
