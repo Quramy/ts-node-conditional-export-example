@@ -7,7 +7,7 @@ An example repository to explain how to build dual-exported npm package with Typ
 First of all, do you really need to publish **Dual-exported** package?
 
 If you need to provide only ESM package, in other words if users of your package can migrate ESM, you don't need to read this repository.
-I recommend to Read [Pure ESM package guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+I recommend to read [Pure ESM package guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
 This repository may help you if you need to provide your package to both ESM and CommonJS users.
 
