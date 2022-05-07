@@ -5,23 +5,23 @@
   "keywords": [],
   "author": "Quramy",
   "license": "MIT",
-  "files": ["lib_esm"],
-  "main": "lib_esm/index.js",
-  "types": "lib_esm/index.d.ts",
+  "files": ["lib"],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./lib_esm/index.d.mts",
-        "default": "./lib_esm/index.mjs"
+        "types": "./lib/index.d.mts",
+        "default": "./lib/index.mjs"
       },
       "require": {
-        "types": "./lib_esm/index.d.cts",
-        "default": "./lib_esm/index.cjs"
+        "types": "./lib/index.d.cts",
+        "default": "./lib/index.cjs"
       }
     }
   },
   "scripts": {
-    "clean": "rimraf lib_esm \"*.tsbuildinfo\"",
+    "clean": "rimraf lib \"*.tsbuildinfo\"",
     "build": "tsc -p tsconfig.esm.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
