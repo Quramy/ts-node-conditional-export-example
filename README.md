@@ -1,6 +1,6 @@
 # ts-node-conditional-export-example
 
-An example repository to explain how to build conditional exported TypeScript package.
+An example repository to explain how to build conditional exported Node.js package using TypeScript.
 
 ## :wrench: Requirements
 
@@ -51,6 +51,18 @@ packages/library-pkg
 ├── jest.config.mjs
 └── tsconfig.json
 ```
+
+```mermaid
+flowchart TD
+  esmuser(ESM user) -.-> index.mjs
+  cjsuser(CommonJS user) -.-> index.cjs
+  subgraph library-pkg
+  index.mjs -- use --> util.js
+  index.cjs -- use --> util.js
+  end
+```
+
+And the `package.json` does not have `"type": "module"` field. So .js files (e.g. `lib/util.js`) are treated as not ESM but CommonJS.
 
 ## :package: How to configure conditional-exported package
 
