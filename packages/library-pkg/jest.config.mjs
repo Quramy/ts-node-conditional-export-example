@@ -1,7 +1,7 @@
 export default {
-  extensionsToTreatAsEsm: [".ts", ".mts"],
+  extensionsToTreatAsEsm: [".mts"],
   transform: {
-    "^.+\\.m?ts$": "@quramy/jest"
+    "^.+\\.[mc]?ts$": "@quramy/jest"
   },
   testMatch: [
     "**/?(*.)+(spec|test).?([mc])[jt]s",
@@ -11,7 +11,8 @@ export default {
   collectCoverageFrom: ["src/**/*.ts", "!**/testing/**"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.mjs$": "$1.mts",
+    "^(\\.{1,2}/.*)\\.cjs$": "$1.cts",
     "^(\\.{1,2}/.*)\\.js$": "$1"
   },
-  moduleFileExtensions: ["js", "mjs", "cjs", "mts", "ts", "json"]
+  moduleFileExtensions: ["js", "mjs", "cjs", "mts", "cts", "ts", "json"]
 };
