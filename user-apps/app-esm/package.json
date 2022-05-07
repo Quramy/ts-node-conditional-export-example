@@ -1,5 +1,5 @@
 {
-  "name": "@quramy-ts-node-dual-example/app-esm",
+  "name": "@quramy/app-esm",
   "version": "1.0.0",
   "description": "A ESM type appliaction package.",
   "type": "module",
@@ -13,7 +13,7 @@
   "author": "Quramy",
   "license": "MIT",
   "dependencies": {
-    "@quramy-ts-node-dual-example/dual-exp-pkg": "^1.0.0",
+    "@quramy/library-pkg": "^1.0.0",
     "typescript": "next"
   }
 }

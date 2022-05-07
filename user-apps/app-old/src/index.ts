@@ -1,4 +1,4 @@
-import { awesomeFn, legacyFn } from "@quramy-ts-node-dual-example/dual-exp-pkg";
+import { awesomeFn, legacyFn } from "@quramy/library-pkg";
 
 function main() {
   legacyFn();
