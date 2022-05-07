@@ -8,5 +8,5 @@
     "rootDir": "src",
     "outDir": "lib_esm"
   },
-  "exclude": ["src/index.ts", "src/index.cts", "lib_esm/**/*", "lib_cjs/**/*"]
+  "exclude": ["lib_esm/**/*", "lib_cjs/**/*"]
 }
