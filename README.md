@@ -1,4 +1,4 @@
-# ts-node-dual-export-example
+# ts-node-conditional-export-example
 
 An example repository to explain how to build dual-exported npm package with TypeScript.
 
@@ -23,21 +23,21 @@ This repo uses npm workspaces feature and the directory structure is the followi
 (repo_root)
 ├── README.md
 ├── packages
-│   └── dual-exp-pkg  # An example of Node.js library package
+│   └── library-pkg  # An example of Node.js library package
 └── user-apps
     ├── app-esm       # An example of application package written by pure ESM
     └── app-old       # An example of application package not specified "type" (i.e. will be recognized CommonJS)
 ```
 
-Here, `packages/dual-exp-pkg` is a main package. Our goal is to configure this package to be applicable from both ESM and CommonJS packages.
-And `app-esm` and `app-old` packages are example of users for `packages/dual-exp-pkg`.
+Here, `packages/library-pkg` is a main package. Our goal is to configure this package to be applicable from both ESM and CommonJS packages.
+And `app-esm` and `app-old` packages are example of users for `packages/library-pkg`.
 
 ## :open_file_folder: Directory structure of dual-exported package
 
 The `dual-exp-package`'s structure is the following:
 
 ```
-packages/dual-exp-pkg
+packages/library-pkg
 ├── src            # Source directory
 │   ├── index.cts
 │   ├── index.mts
@@ -68,7 +68,7 @@ We can configure dual-exported package using [Node.js Conditional exports featur
 
 ```json
 {
-  "name": "@quramy-ts-node-dual-example/dual-exp-pkg",
+  "name": "@quramy-ts-node-dual-example/library-pkg",
   "files": ["lib_cjs", "lib_esm"],
   "main": "lib_cjs/index.js",
   "types": "lib_cjs/index.d.ts",
@@ -89,8 +89,8 @@ We can configure dual-exported package using [Node.js Conditional exports featur
 
 The above means:
 
-- Provide `./lib_esm/index.mjs` file to users that prefer `import "@quramy-ts-node-dual-example/dual-exp-pkg"`
-- Provide `./lib_cjs/index.cjs` file to users that prefer `require("@quramy-ts-node-dual-example/dual-exp-pkg")`
+- Provide `./lib_esm/index.mjs` file to users that prefer `import "@quramy-ts-node-dual-example/library-pkg"`
+- Provide `./lib_cjs/index.cjs` file to users that prefer `require("@quramy-ts-node-dual-example/library-pkg")`
 - Provide `./lib_cjs/index.js` file to users than use old Node.js (< v12.16.0)
 
 And TypeScript's type declaration files are exported conditionally too:
@@ -101,20 +101,20 @@ And TypeScript's type declaration files are exported conditionally too:
 
 ## :recycle: How to switch distribution module type
 
-`dual-exp-pkg` has 2 tsconfig json file to output final distribution.
+`library-pkg` has 2 tsconfig json file to output final distribution.
 
 ```sh
-$ cd packages/dual-exp-pkg
+$ cd packages/library-pkg
 $ npx tsc -p tsconfig.esm.json # Output files to lib_esm directory
 ```
 
 ```sh
-$ cd packages/dual-exp-pkg
+$ cd packages/library-pkg
 $ npx tsc -p tsconfig.cjs.json # Output files to lib_cjs directory
 ```
 
 ```js
-/* packages/dual-exp-pkg/tsconfig.esm.json */
+/* packages/library-pkg/tsconfig.esm.json */
 {
   "compilerOptions": {
     "module": "node16",
@@ -127,7 +127,7 @@ $ npx tsc -p tsconfig.cjs.json # Output files to lib_cjs directory
 ```
 
 ```js
-/* packages/dual-exp-pkg/tsconfig.cjs.json */
+/* packages/library-pkg/tsconfig.cjs.json */
 {
   "compilerOptions": {
     "module": "commonjs",
@@ -168,7 +168,7 @@ There are 2 important rules:
 1. TypeScript `--module` option never affect the above table. As well as [Node.js determines module type without file content](https://nodejs.org/api/packages.html#determining-module-system), TypeScript determines output JavaScript file extension using only extension of its source file
 1. Import specifiers (e.g. `from "./util.js"`) are never transpiled if you configure TypeScript to preserve import statements (e.g. `--module esnext` or `--module node16`)
 
-For instance, let's think source files in my `dual-exp-pkg`.
+For instance, let's think source files in my `library-pkg`.
 
 `.js` files are treated as CommonJS scripts because the `package.json` doesn't have `type` field(It's [Node.js 's determining module system](https://nodejs.org/api/packages.html#determining-module-system)).
 So, TypeScript sources in this packages are treated as the following:

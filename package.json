@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "ts-node-dual-export-example",
+  "name": "ts-node-conditional-export-example",
   "description": "An example package to explain how to build dual-export npm package in TypeScript.",
   "scripts": {
     "clean": "npm run clean --workspaces",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Quramy/ts-node-dual-export-example.git"
+    "url": "git+https://github.com/Quramy/ts-node-conditional-export-example.git"
   },
   "keywords": [],
   "author": "Quramy",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Quramy/ts-node-dual-export-example/issues"
+    "url": "https://github.com/Quramy/ts-node-conditional-export-example/issues"
   },
-  "homepage": "https://github.com/Quramy/ts-node-dual-export-example#readme",
+  "homepage": "https://github.com/Quramy/ts-node-conditional-export-example#readme",
   "workspaces": ["packages/*", "user-apps/*"],
   "devDependencies": {
     "prettier": "^2.6.2",
