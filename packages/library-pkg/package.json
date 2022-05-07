@@ -1,7 +1,7 @@
 {
   "name": "@quramy/library-pkg",
   "version": "1.0.0",
-  "description": "An example package to explain how to build dual-export npm package in TypeScript.",
+  "description": "An example package to explain how to build conditional exported TypeScript package",
   "keywords": [],
   "author": "Quramy",
   "license": "MIT",

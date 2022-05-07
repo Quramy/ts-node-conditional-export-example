@@ -1,15 +1,6 @@
 # ts-node-conditional-export-example
 
-An example repository to explain how to build dual-exported npm package with TypeScript.
-
-## :warning: Caveat
-
-First of all, do you really need to publish **Dual-exported** package?
-
-If you need to provide only ESM package, in other words if users of your package can migrate ESM, you don't need to read this repository.
-I recommend to read [Pure ESM package guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
-
-This repository may help you if you need to provide your package to both ESM and CommonJS users.
+An example repository to explain how to build conditional exported TypeScript package.
 
 ## :wrench: Requirements
 
@@ -23,7 +14,7 @@ This repo uses npm workspaces feature and the directory structure is the followi
 (repo_root)
 ├── README.md
 ├── packages
-│   └── library-pkg  # An example of Node.js library package
+│   └── library-pkg   # An example of Node.js library package
 └── user-apps
     ├── app-esm       # An example of application package written by pure ESM
     └── app-old       # An example of application package not specified "type" (i.e. will be recognized CommonJS)
@@ -32,55 +23,50 @@ This repo uses npm workspaces feature and the directory structure is the followi
 Here, `packages/library-pkg` is a main package. Our goal is to configure this package to be applicable from both ESM and CommonJS packages.
 And `app-esm` and `app-old` packages are example of users for `packages/library-pkg`.
 
-## :open_file_folder: Directory structure of dual-exported package
+## :open_file_folder: Directory structure of conditional-exported package
 
-The `dual-exp-package`'s structure is the following:
+The `library-pkg`'s structure is the following:
 
 ```
 packages/library-pkg
-├── src            # Source directory
+├── src               # Source directory
 │   ├── index.cts
 │   ├── index.mts
 │   ├── index.ts
 │   └── util.ts
-├── lib_cjs        # Distribution directory for CommonJS package
+├── lib               # Distribution directory
 │   ├── index.cjs
 │   ├── index.d.cts
+│   ├── index.mjs
+│   ├── index.d.mts
 │   ├── index.js
 │   ├── index.d.ts
 │   ├── util.js
 │   └── util.d.ts
-├── lib_esm        # Distribution directory for ESM package
-│   ├── index.d.mts
-│   ├── index.mjs
-│   ├── util.js
-│   └── util.d.js
 ├── README.md
 ├── package.json
-├── tsconfig.cjs.json
-├── tsconfig.esm.json
 └── tsconfig.json
 ```
 
-## :package: How to configure dual-exported package
+## :package: How to configure conditional-exported package
 
-We can configure dual-exported package using [Node.js Conditional exports feature](https://nodejs.org/api/packages.html#conditional-exports).
+We can configure provide multiple entry points using [Node.js Conditional exports feature](https://nodejs.org/api/packages.html#conditional-exports).
 
 ```json
 {
-  "name": "@quramy-ts-node-dual-example/library-pkg",
-  "files": ["lib_cjs", "lib_esm"],
-  "main": "lib_cjs/index.js",
-  "types": "lib_cjs/index.d.ts",
+  "name": "@quramy/library-pkg",
+  "files": ["lib"],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./lib_esm/index.d.mts",
-        "default": "./lib_esm/index.mjs"
+        "types": "./lib/index.d.mts",
+        "default": "./lib/index.mjs"
       },
       "require": {
-        "types": "./lib_cjs/index.d.cts",
-        "default": "./lib_cjs/index.cjs"
+        "types": "./lib/index.d.cts",
+        "default": "./lib/index.cjs"
       }
     }
   }
@@ -89,59 +75,37 @@ We can configure dual-exported package using [Node.js Conditional exports featur
 
 The above means:
 
-- Provide `./lib_esm/index.mjs` file to users that prefer `import "@quramy-ts-node-dual-example/library-pkg"`
-- Provide `./lib_cjs/index.cjs` file to users that prefer `require("@quramy-ts-node-dual-example/library-pkg")`
-- Provide `./lib_cjs/index.js` file to users than use old Node.js (< v12.16.0)
+- Provide `./lib/index.mjs` file to users that prefer `import "@quramy/library-pkg"`
+- Provide `./lib/index.cjs` file to users that prefer `require("@quramy/library-pkg")`
+- Provide `./lib/index.js` file to users than use old Node.js (< v12.16.0)
 
 And TypeScript's type declaration files are exported conditionally too:
 
-- Provide `./lib_esm/index.d.mts` file to users that prefer ESM and TypeScript >= 4.7
-- Provide `./lib_cjs/index.d.cts` file to users that prefer CommonJS and TypeScript >= 4.7
-- Provide `./llb_cjs/index.d.ts` otherwise
+- Provide `./lib/index.d.mts` file to users that prefer ESM and TypeScript >= 4.7
+- Provide `./lib/index.d.cts` file to users that prefer CommonJS and TypeScript >= 4.7
+- Provide `./llb/index.d.ts` otherwise
 
-## :recycle: How to switch distribution module type
+### :warning: Don't forget `types` fields
 
-`library-pkg` has 2 tsconfig json file to output final distribution.
+You don't forget set `types` in each `exports` block. If you miss them, users of your package can't resolve type declaration file corresponding to each exported entry point.
 
-```sh
-$ cd packages/library-pkg
-$ npx tsc -p tsconfig.esm.json # Output files to lib_esm directory
-```
+## :nut_and_bolt: How to configure TypeScript
 
-```sh
-$ cd packages/library-pkg
-$ npx tsc -p tsconfig.cjs.json # Output files to lib_cjs directory
-```
+We pass `--module node16` option to TypeScript via `packages/library-pkg/tsconfig.json`.
 
 ```js
-/* packages/library-pkg/tsconfig.esm.json */
+/* packages/library-pkg/tsconfig.json */
 {
   "compilerOptions": {
     "module": "node16",
-    "moduleResolution": "node16",
-    "outDir": "lib_esm",
     // skip
   },
-  "exclude": ["src/index.ts", "src/index.cts", "lib_esm/**/*", "lib_cjs/**/*"]
 }
 ```
 
-```js
-/* packages/library-pkg/tsconfig.cjs.json */
-{
-  "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "lib_cjs",
-    // skip
-  },
-  "exclude": ["src/**/*.mts", "lib_esm/**/*", "lib_cjs/**/*"]
-}
-```
+`node16` (or `nodenext`) means that you should follow strict ECMAScript Module rules.
 
-The 2 json files have different `module` properties. `node16` (or `nodenext`) means that you should follow strict ECMAScript Module rules.
-
-For example, the following import declaration statement is valid under `--module commonjs`.
+For example, the following import declaration statement is valid under `--module commonjs` or `--module esnext`.
 
 ```ts
 import * as util from "./util";

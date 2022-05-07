@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "ts-node-conditional-export-example",
-  "description": "An example package to explain how to build dual-export npm package in TypeScript.",
+  "description": "An example package to explain how to build conditional exported TypeScript package",
   "scripts": {
     "clean": "npm run clean --workspaces",
     "build": "npm run build --workspaces",
