@@ -31,9 +31,12 @@ The `library-pkg`'s structure is the following:
 packages/library-pkg
 ├── src               # Source directory
 │   ├── index.cts
+│   ├── index.test.cts
 │   ├── index.mts
+│   ├── index.test.mts
 │   ├── index.ts
-│   └── util.ts
+│   ├── util.ts
+│   └── util.test.ts
 ├── lib               # Distribution directory
 │   ├── index.cjs
 │   ├── index.d.cts
@@ -45,6 +48,7 @@ packages/library-pkg
 │   └── util.d.ts
 ├── README.md
 ├── package.json
+├── jest.config.mjs
 └── tsconfig.json
 ```
 
@@ -141,6 +145,64 @@ So, TypeScript sources in this packages are treated as the following:
 - `src/index.cts`: is treated as a CommonJS script
 - `src/index.mts`: is treated as an ESM
 - `src/util.ts`: is treated as a CommonJS script
+
+## :memo: How to configure Jest?
+
+As of May 2022, Jest and well-known transformers (babel, ts-jest, swc, etc.) do not support TypeScript 4.7.
+For this reason, explicitly configure TypeScript ESM settings and transformers.
+In the near future, it could be rewritten using the transformers or presets (but I don't think the essence of this configure will change significantly).
+
+```js
+/* packages/library-pkg/jest.config.mjs */
+
+export default {
+  // - .mjs files are always treated as ESM by Jest default.
+  // - In this package, *.js should NOT be treated as ESM.
+  extensionsToTreatAsEsm: [".mts"],
+
+  // Transpile TypeScript sources (.ts, .cts, .mts)
+  transform: {
+    "^.+\\.[mc]?ts$": "@quramy/jest"
+  },
+
+  // To let Jest resolve relative import spcificers like `import "./util.mjs"`,
+  // look up corresponding TS source such as "./util.mts" .
+  moduleNameMapper: {
+    "^(\\.\\.?/.*)\\.mjs$": ["$1.mts", "$1.mjs"],
+    "^(\\.\\.?/.*)\\.cjs$": ["$1.cts", "$1.cjs"],
+    "^(\\.\\.?/.*)\\.js$": ["$1.ts", "$1.js"]
+  },
+
+  moduleFileExtensions: ["mts", "cts", "ts", "mjs", "cjs", "js", "json"],
+
+  testMatch: ["**/?(*.)+(spec|test).?([mc])[jt]s"],
+  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/lib/"]
+};
+```
+
+<details>
+<summary>Transformer responsibility</summary>
+<p>
+Whether .ts files are treated as ESM is contextual. TypeScript determines this via using package.json's <code>type</code> field. <br />
+Jest transformer should determines this as well as TypeScript does.
+In Jest configuration context, transformer should transpile .ts file to ESM if <code>extensionsToTreatAsEsm</code> includes .ts .
+</p>
+</details>
+
+To let Jest treat native ESM module, we should pass `--experimental-vm-modules` option to Node.js such as:
+
+```js
+/* package.json */
+
+{
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    // skip
+  }
+}
+```
+
+See also https://jestjs.io/docs/ecmascript-modules if you more details.
 
 ## License
 
