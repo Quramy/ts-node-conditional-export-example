@@ -54,11 +54,11 @@ packages/library-pkg
 
 ```mermaid
 flowchart TD
-  esmuser(ESM user) -.-> index.mjs
-  cjsuser(CommonJS user) -.-> index.cjs
+  esmuser(ESM user) -.-> imjs
+  cjsuser(CommonJS user) -.-> icjs
   subgraph library-pkg
-  index.mjs -- use --> util.js
-  index.cjs -- use --> util.js
+    imjs[lib/index.mjs] -- static import --> util[lib/util.js]
+    icjs[lib/index.cjs] -- require --> util[lib/util.js]
   end
 ```
 
@@ -139,14 +139,14 @@ It's simple. `tsc` compiles TypeScript files as the following table:
 
 | TypeScript source file extension | Compiled JavaScript file extension | Generated type declaration file extension |
 | :------------------------------- | :--------------------------------- | :---------------------------------------- |
-| `.ts`                            | `.js`                              | `d.ts`                                    |
-| `.cts`                           | `.cjs`                             | `d.cts`                                   |
-| `.mts`                           | `.mjs`                             | `d.mts`                                   |
+| `.ts`                            | `.js`                              | `.d.ts`                                   |
+| `.cts`                           | `.cjs`                             | `.d.cts`                                  |
+| `.mts`                           | `.mjs`                             | `.d.mts`                                  |
 
 There are 2 important rules:
 
 1. TypeScript `--module` option never affect the above table. As well as [Node.js determines module type without file content](https://nodejs.org/api/packages.html#determining-module-system), TypeScript determines output JavaScript file extension using only extension of its source file
-1. Import specifiers (e.g. `from "./util.js"`) are never transpiled if you configure TypeScript to preserve import statements (e.g. `--module esnext` or `--module node16`)
+1. Import specifiers (e.g. `from "./util.js"`) are never changed via compilation procedure if you configure TypeScript to preserve import statements (e.g. `--module esnext` or `--module node16`)
 
 For instance, let's think source files in my `library-pkg`.
 
