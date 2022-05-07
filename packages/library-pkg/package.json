@@ -23,7 +23,8 @@
   "scripts": {
     "clean": "rimraf lib \"*.tsbuildinfo\"",
     "build": "tsc",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:ci": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "devDependencies": {
     "@types/node": "^17.0.0",

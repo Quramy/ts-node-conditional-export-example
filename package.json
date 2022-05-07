@@ -6,6 +6,7 @@
     "clean": "npm run clean --workspaces",
     "build": "npm run build --workspaces",
     "test": "npm run test --workspace packages/library-pkg",
+    "test:ci": "npm run test:ci --workspace packages/library-pkg",
     "start": "npm run start --workspace user-apps/app-esm --workspace user-apps/app-old"
   },
   "repository": {
