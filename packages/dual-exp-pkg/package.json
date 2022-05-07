@@ -22,7 +22,7 @@
   },
   "scripts": {
     "clean": "rimraf lib \"*.tsbuildinfo\"",
-    "build": "tsc -p tsconfig.esm.json",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
