@@ -14,6 +14,6 @@
   "license": "MIT",
   "dependencies": {
     "@quramy/library-pkg": "^1.0.0",
-    "typescript": "next"
+    "typescript": "4.7.1-rc"
   }
 }
