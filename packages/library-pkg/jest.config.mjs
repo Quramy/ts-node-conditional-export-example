@@ -1,3 +1,13 @@
+const swcrc = {
+  jsc: {
+    parser: {
+      syntax: "typescript"
+    },
+    target: "es2020"
+    // Other compiler options
+  }
+};
+
 export default {
   // - .mjs files are always treated as ESM by Jest default.
   // - In this package, *.js should NOT be treated as ESM.
@@ -5,10 +15,31 @@ export default {
 
   // Transpile TypeScript sources (.ts, .cts, .mts)
   transform: {
-    // TODO
-    // This transformer is not for produciton usecase.
-    // It should be replaced others (e.g. swc or ts-jest or...) after TS4.7 released
-    "^.+\\.[mc]?ts$": "@quramy/jest"
+    // Transpile .mts as Native ESM
+    "^.+\\.mts$": [
+      "@swc/jest",
+      {
+        ...swcrc,
+        module: {
+          type: "es6",
+          strict: true,
+          scrictMode: false,
+          noInterop: true,
+          ignoreDynamic: true
+        }
+      }
+    ],
+    // Transpile .ts or .cts as CommonJS
+    "^.+\\.c?ts$": [
+      "@swc/jest",
+      {
+        ...swcrc,
+        module: {
+          type: "commonjs",
+          ignoreDynamic: true
+        }
+      }
+    ]
   },
 
   // To let Jest resolve relative import spcificers like `import "./util.mjs"`,

@@ -160,12 +160,20 @@ So, TypeScript sources in this packages are treated as the following:
 
 ## :memo: How to configure Jest?
 
-As of May 2022, Jest and well-known transformers (babel, ts-jest, swc, etc.) do not support TypeScript 4.7.
-For this reason, explicitly configure TypeScript ESM settings and transformers.
-In the near future, it could be rewritten using the transformers or presets (but I don't think the essence of this configure will change significantly).
+Jest can be configured such as following:
 
 ```js
 /* packages/library-pkg/jest.config.mjs */
+
+const swcrc = {
+  jsc: {
+    parser: {
+      syntax: "typescript"
+    },
+    target: "es2020"
+    // Other compiler options
+  }
+};
 
 export default {
   // - .mjs files are always treated as ESM by Jest default.
@@ -174,7 +182,31 @@ export default {
 
   // Transpile TypeScript sources (.ts, .cts, .mts)
   transform: {
-    "^.+\\.[mc]?ts$": "@quramy/jest"
+    // Transpile .mts as Native ESM
+    "^.+\\.mts$": [
+      "@swc/jest",
+      {
+        ...swcrc,
+        module: {
+          type: "es6",
+          strict: true,
+          scrictMode: false,
+          noInterop: true,
+          ignoreDynamic: true
+        }
+      }
+    ],
+    // Transpile .ts or .cts as CommonJS
+    "^.+\\.c?ts$": [
+      "@swc/jest",
+      {
+        ...swcrc,
+        module: {
+          type: "commonjs",
+          ignoreDynamic: true
+        }
+      }
+    ]
   },
 
   // To let Jest resolve relative import spcificers like `import "./util.mjs"`,
@@ -188,7 +220,8 @@ export default {
   moduleFileExtensions: ["mts", "cts", "ts", "mjs", "cjs", "js", "json"],
 
   testMatch: ["**/?(*.)+(spec|test).?([mc])[jt]s"],
-  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/lib/"]
+  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/lib/"],
+  collectCoverageFrom: ["src/**/*.?([mc])ts", "!src/**/*.test.*"]
 };
 ```
 
