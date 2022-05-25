@@ -8,7 +8,7 @@
     "clean": "rimraf lib \"*.tsbuildinfo\"",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
+    "start": "ts-node-esm src/index.ts"
   },
   "author": "Quramy",
   "license": "MIT",
