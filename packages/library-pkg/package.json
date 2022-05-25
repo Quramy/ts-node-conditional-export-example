@@ -32,6 +32,6 @@
     "@swc/core": "^1.2.0",
     "@swc/jest": "^0.2.21",
     "jest": "^28.0.0",
-    "typescript": "4.7.1-rc"
+    "typescript": "^4.7.2"
   }
 }
